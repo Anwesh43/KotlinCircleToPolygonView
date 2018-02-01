@@ -127,12 +127,13 @@ class CircleToPolygonalView(ctx:Context,var n:Int = 3):View(ctx) {
         }
     }
     companion object {
-        fun create(activity:Activity,vararg sides:Int):CircleToPolygonalView {
+        fun create(activity:Activity,r:Int,vararg sides:Int):CircleToPolygonalView {
             val view = CircleToPolygonalView(activity)
+            var size = (r*5/2)
             if(sides.size == 1 && sides[0] >= 3) {
                 view.n = sides[0]
             }
-            activity.setContentView(view)
+            activity.addContentView(view,ViewGroup.LayoutParams(size,size))
             return view
         }
     }
