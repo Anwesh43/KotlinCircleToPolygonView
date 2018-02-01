@@ -20,6 +20,7 @@ class CircleToPolygonalView(ctx:Context,var n:Int = 3):View(ctx) {
         return true
     }
     data class CircleToPolygon(var x:Float,var y:Float,var r:Float,var n:Int) {
+        val state = CircleToPolygonState()
         fun draw(canvas:Canvas,paint:Paint) {
             if(n >= 3) {
                 paint.color = Color.BLUE
@@ -33,7 +34,7 @@ class CircleToPolygonalView(ctx:Context,var n:Int = 3):View(ctx) {
                     val path = Path()
                     for(j in 0..deg.toInt()) {
                         val px = r*Math.cos(j*Math.PI/180).toFloat()
-                        val py = yr*Math.sin(j*Math.PI/180).toFloat()
+                        val py = yr*state.scale + r*(1-state.scale)*Math.sin(j*Math.PI/180).toFloat()
                         if(j == 0) {
                             path.moveTo(px,py)
                         }
@@ -48,10 +49,10 @@ class CircleToPolygonalView(ctx:Context,var n:Int = 3):View(ctx) {
             }
         }
         fun update(stopcb:(Float)->Unit) {
-
+            state.update(stopcb)
         }
         fun startUpdating(startcb:()->Unit) {
-
+            state.startUpdating(startcb)
         }
     }
     data class CircleToPolygonState(var scale:Float = 0f, var dir:Float = 0f, var prevScale:Float = 0f) {
