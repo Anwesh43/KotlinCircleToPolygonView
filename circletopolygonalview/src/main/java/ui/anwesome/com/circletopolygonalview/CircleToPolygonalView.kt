@@ -30,17 +30,19 @@ class CircleToPolygonalView(ctx:Context,var n:Int = 3):View(ctx) {
                 paint.strokeWidth = r/20
                 paint.strokeCap = Paint.Cap.ROUND
                 val deg = 360f/n
-                val yr = r*Math.sin((deg/2)*Math.PI/180).toFloat()
+                val yr = r*Math.sin(((180-deg)/2)*Math.PI/180).toFloat()
                 canvas.save()
                 canvas.translate(x,y)
+                val gap = deg.toInt()
+                val offset = 90 - gap/2
                 for(i in 0..n-1) {
                     canvas.save()
                     canvas.rotate(deg*i)
                     val path = Path()
-                    for(j in 0..deg.toInt()) {
+                    for(j in offset..(offset+gap)) {
                         val px = r*Math.cos(j*Math.PI/180).toFloat()
                         val py = yr*state.scale + r*(1-state.scale)*Math.sin(j*Math.PI/180).toFloat()
-                        if(j == 0) {
+                        if(j == offset) {
                             path.moveTo(px,py)
                         }
                         else {
