@@ -27,7 +27,7 @@ class CircleToPolygonalView(ctx:Context,var n:Int = 3):View(ctx) {
             if(n >= 3) {
                 paint.color = Color.parseColor("#311B92")
                 paint.style = Paint.Style.STROKE
-                paint.strokeWidth = r/20
+                paint.strokeWidth = r/10
                 paint.strokeCap = Paint.Cap.ROUND
                 val deg = 360f/n
                 val yr = r*Math.sin(((180-deg)/2)*Math.PI/180).toFloat()
@@ -86,11 +86,11 @@ class CircleToPolygonalView(ctx:Context,var n:Int = 3):View(ctx) {
                 view.postInvalidate()
             }
         }
-        fun update(updatecb:()->Unit) {
+        fun update(updatecb:()->Unit,delay:Long) {
             if(animated) {
                 updatecb()
                 try {
-                    Thread.sleep(50)
+                    Thread.sleep(delay)
                     view.invalidate()
                 }
                 catch(ex:Exception) {
@@ -116,10 +116,12 @@ class CircleToPolygonalView(ctx:Context,var n:Int = 3):View(ctx) {
             canvas.drawColor(Color.parseColor("#212121"))
             circleToPolygon?.draw(canvas,paint)
             time++
-            animator.update {
-                circleToPolygon?.update {
-                    animator.stop()
-                }
+            if(view.n > 0) {
+                animator.update({
+                    circleToPolygon?.update {
+                        animator.stop()
+                    }
+                }, (150/view.n).toLong())
             }
         }
         fun handleTap() {
