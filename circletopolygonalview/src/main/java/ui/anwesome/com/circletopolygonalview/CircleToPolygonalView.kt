@@ -97,4 +97,28 @@ class CircleToPolygonalView(ctx:Context,var n:Int = 3):View(ctx) {
             }
         }
     }
+    data class CircleToPolygonRenderer(var view:CircleToPolygonalView,var time:Int = 0) {
+        val animator = CircleToPolygonAnimator(view)
+        var circleToPolygon:CircleToPolygon ?= null
+        fun render(canvas:Canvas,paint:Paint) {
+            if(time == 0) {
+                val w = canvas.width.toFloat()
+                val h = canvas.height.toFloat()
+                circleToPolygon = CircleToPolygon(w/2,h/2,Math.min(w,h)*0.4f,view.n)
+            }
+            canvas.drawColor(Color.parseColor("#212121"))
+            circleToPolygon?.draw(canvas,paint)
+            time++
+            animator.update {
+                circleToPolygon?.update {
+                    animator.stop()
+                }
+            }
+        }
+        fun handleTap() {
+            circleToPolygon?.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
