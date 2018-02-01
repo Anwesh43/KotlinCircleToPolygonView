@@ -8,13 +8,14 @@ import android.content.*
 import android.view.*
 class CircleToPolygonalView(ctx:Context,var n:Int = 3):View(ctx) {
     val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    val renderer = CircleToPolygonRenderer(this)
     override fun onDraw(canvas:Canvas) {
-
+        renderer.render(canvas,paint)
     }
     override fun onTouchEvent(event:MotionEvent):Boolean {
         when(event.action) {
             MotionEvent.ACTION_DOWN -> {
-
+                renderer.handleTap()
             }
         }
         return true
@@ -23,7 +24,10 @@ class CircleToPolygonalView(ctx:Context,var n:Int = 3):View(ctx) {
         val state = CircleToPolygonState()
         fun draw(canvas:Canvas,paint:Paint) {
             if(n >= 3) {
-                paint.color = Color.BLUE
+                paint.color = Color.parseColor("#311B92")
+                paint.style = Paint.Style.STROKE
+                paint.strokeWidth = r/20
+                paint.strokeCap = Paint.Cap.ROUND
                 val deg = 360f/n
                 val yr = r*Math.sin((deg/2)*Math.PI/180).toFloat()
                 canvas.save()
