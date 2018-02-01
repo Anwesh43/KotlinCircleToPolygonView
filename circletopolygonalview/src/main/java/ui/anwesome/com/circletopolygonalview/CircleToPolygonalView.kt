@@ -3,6 +3,7 @@ package ui.anwesome.com.circletopolygonalview
 /**
  * Created by anweshmishra on 01/02/18.
  */
+import android.app.Activity
 import android.graphics.*
 import android.content.*
 import android.view.*
@@ -123,6 +124,16 @@ class CircleToPolygonalView(ctx:Context,var n:Int = 3):View(ctx) {
             circleToPolygon?.startUpdating {
                 animator.start()
             }
+        }
+    }
+    companion object {
+        fun create(activity:Activity,vararg sides:Int):CircleToPolygonalView {
+            val view = CircleToPolygonalView(activity)
+            if(sides.size == 1 && sides[0] >= 3) {
+                view.n = sides[0]
+            }
+            activity.setContentView(view)
+            return view
         }
     }
 }
