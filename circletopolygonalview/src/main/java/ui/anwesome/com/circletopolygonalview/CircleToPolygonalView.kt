@@ -72,4 +72,29 @@ class CircleToPolygonalView(ctx:Context,var n:Int = 3):View(ctx) {
             }
         }
     }
+    data class CircleToPolygonAnimator(var view:View,var animated:Boolean = false) {
+        fun start() {
+            if(!animated) {
+                animated = true
+                view.postInvalidate()
+            }
+        }
+        fun update(updatecb:()->Unit) {
+            if(animated) {
+                updatecb()
+                try {
+                    Thread.sleep(50)
+                    view.invalidate()
+                }
+                catch(ex:Exception) {
+
+                }
+            }
+        }
+        fun stop() {
+            if(animated) {
+                animated = false
+            }
+        }
+    }
 }
